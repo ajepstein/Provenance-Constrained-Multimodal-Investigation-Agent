@@ -1,0 +1,193 @@
+{
+  "schema_version": "1.0",
+  "case_id": "case-010",
+  "claim": {
+    "id": "clm-010",
+    "text": "The supplied evidence shows that required protective equipment (hard hat and hi-vis vest) was present during inspection INS-2401.",
+    "site": "site-7/north-gate",
+    "window": [
+      "2026-03-23T10:00:00Z",
+      "2026-03-23T12:00:00Z"
+    ]
+  },
+  "question": "Case: case-010\nClaim to evaluate: The supplied evidence shows that required protective equipment (hard hat and hi-vis vest) was present during inspection INS-2401.\nSite: site-7/north-gate\nInspection window: 2026-03-23T10:00:00Z to 2026-03-23T12:00:00Z\n\nDetermine whether the recorded evidence supports this claim.",
+  "model": "stub:careful",
+  "policy": {
+    "approved_models": {
+      "ppe-detector": "2.3.0"
+    },
+    "min_confidence": 0.6,
+    "window_slack_minutes": 0
+  },
+  "evidence_graph": {
+    "digest": "814d1df4daaa058a",
+    "node_count": 8,
+    "edge_count": 4
+  },
+  "tool_calls": [
+    {
+      "seq": 1,
+      "name": "retrieve_evidence",
+      "arguments": {
+        "question": "Case: case-010\nClaim to evaluate: The supplied evidence shows that required protective equipment (hard hat and hi-vis vest) was present during inspection INS-2401.\nSite: site-7/north-gate\nInspection window: 2026-03-23T10:00:00Z to 2026-03-23T12:00:00Z\n\nDetermine whether the recorded evidence supports this claim."
+      },
+      "result_digest": "19f78114b58d",
+      "result_ids": [
+        "clm-010",
+        "img-010-south",
+        "note-010",
+        "obs-010-a",
+        "obs-010-b",
+        "obs-010-c",
+        "obs-010-d"
+      ]
+    },
+    {
+      "seq": 2,
+      "name": "inspect_provenance",
+      "arguments": {
+        "item_id": "obs-010-c"
+      },
+      "result_digest": "75c5cdef2127",
+      "result_ids": [
+        "note-010",
+        "obs-010-c"
+      ]
+    },
+    {
+      "seq": 3,
+      "name": "record_decision",
+      "arguments": {
+        "outcome": "insufficient_evidence",
+        "assertions": [
+          {
+            "statement": "hard_hat is present",
+            "cited": [
+              "obs-010-c"
+            ]
+          },
+          {
+            "statement": "hi_vis_vest is present",
+            "cited": [
+              "obs-010-d"
+            ]
+          }
+        ],
+        "evidence_used": [
+          "obs-010-c",
+          "obs-010-d"
+        ],
+        "evidence_not_used": [
+          {
+            "id": "obs-010-a",
+            "reason": "SCOPE_MISMATCH"
+          },
+          {
+            "id": "obs-010-b",
+            "reason": "SCOPE_MISMATCH"
+          }
+        ],
+        "summary": "Required evidence types are not satisfied by admissible sources."
+      },
+      "result_digest": "49a18e7bc05f",
+      "result_ids": []
+    }
+  ],
+  "agent_decision": {
+    "outcome": "insufficient_evidence",
+    "summary": "Required evidence types are not satisfied by admissible sources.",
+    "assertions": [
+      {
+        "statement": "hard_hat is present",
+        "cited": [
+          "obs-010-c"
+        ]
+      },
+      {
+        "statement": "hi_vis_vest is present",
+        "cited": [
+          "obs-010-d"
+        ]
+      }
+    ],
+    "evidence_used": [
+      "obs-010-c",
+      "obs-010-d"
+    ],
+    "evidence_not_used": [
+      {
+        "id": "obs-010-a",
+        "reason": "SCOPE_MISMATCH"
+      },
+      {
+        "id": "obs-010-b",
+        "reason": "SCOPE_MISMATCH"
+      }
+    ]
+  },
+  "validation": {
+    "violations": [
+      {
+        "code": "MISSING_REQUIRED_EVIDENCE",
+        "severity": "downgrade",
+        "message": "no admissible evidence satisfies: image_evidence, detector_evidence",
+        "refs": [
+          "image_evidence",
+          "detector_evidence"
+        ]
+      }
+    ],
+    "citations_admitted": [
+      "obs-010-c",
+      "obs-010-d"
+    ],
+    "citations_rejected": []
+  },
+  "unresolved_conflicts": [],
+  "missing_requirements": [
+    "image_evidence",
+    "detector_evidence"
+  ],
+  "evidence_detail": [
+    {
+      "id": "obs-010-c",
+      "label": "hard_hat",
+      "value": "present",
+      "confidence": null,
+      "produced_by": "operator:j.reyes",
+      "transformations": [],
+      "roots": [
+        {
+          "id": "note-010",
+          "uri": "s3://inspections/site-7/2026-03-23/note-010.txt",
+          "sha256": "58cd12a7409be3f1",
+          "captured_at": "2026-03-23T11:30:00Z",
+          "site": "site-7/north-gate"
+        }
+      ],
+      "defects": []
+    },
+    {
+      "id": "obs-010-d",
+      "label": "hi_vis_vest",
+      "value": "present",
+      "confidence": null,
+      "produced_by": "operator:j.reyes",
+      "transformations": [],
+      "roots": [
+        {
+          "id": "note-010",
+          "uri": "s3://inspections/site-7/2026-03-23/note-010.txt",
+          "sha256": "58cd12a7409be3f1",
+          "captured_at": "2026-03-23T11:30:00Z",
+          "site": "site-7/north-gate"
+        }
+      ],
+      "defects": []
+    }
+  ],
+  "final_outcome": "insufficient_evidence",
+  "outcome_changed_by_validator": false,
+  "content_hash": "7d77a5d6109ab5ef",
+  "produced_at": "2026-08-20T19:57:36+00:00"
+}

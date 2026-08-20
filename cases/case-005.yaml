@@ -1,0 +1,70 @@
+case_id: case-005
+title: Contradicted by vest absence, detector and note agree
+tags: [contradicted, clean]
+
+claim:
+  id: clm-005
+  text: >-
+    The supplied evidence shows that required protective equipment (hard hat
+    and hi-vis vest) was present during inspection INS-2341.
+  predicate: ppe_present
+  deciding_labels: [hard_hat, hi_vis_vest]
+  required_labels: [hard_hat, hi_vis_vest]
+  requires: [image_evidence, detector_evidence, human_record]
+  window_start: "2026-03-12T15:00:00Z"
+  window_end: "2026-03-12T17:00:00Z"
+  site: site-4/pump-house
+
+artifacts:
+  - id: img-005
+    media_type: image
+    uri: s3://inspections/site-4/2026-03-12/img-005.jpg
+    sha256: "4d7f9931b60ec2aa"
+    captured_at: "2026-03-12T16:05:19Z"
+    captured_by: cam-ph-01
+    uploaded_by: operator:t.lindqvist
+    site: site-4/pump-house
+  - id: note-005
+    media_type: inspection_record
+    uri: s3://inspections/site-4/2026-03-12/ins-2341.json
+    sha256: "0aa4c7e28d135fb9"
+    captured_at: "2026-03-12T16:25:00Z"
+    uploaded_by: operator:t.lindqvist
+    site: site-4/pump-house
+    text: >-
+      INS-2341 PPE check failed. Contractor crew arrived without hi-vis; work
+      stopped until vests were issued at 16:40.
+
+observations:
+  - id: obs-005-a
+    obs_kind: detection
+    label: hard_hat
+    value: present
+    confidence: 0.88
+    at: "2026-03-12T16:06:00Z"
+    derived_from: [img-005]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-005-b
+    obs_kind: detection
+    label: hi_vis_vest
+    value: absent
+    confidence: 0.86
+    at: "2026-03-12T16:06:00Z"
+    derived_from: [img-005]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-005-c
+    obs_kind: assertion
+    label: hi_vis_vest
+    value: absent
+    text: Contractor crew arrived without hi-vis
+    span: [24, 61]
+    derived_from: [note-005]
+    producer: {type: human, id: operator:t.lindqvist}
+
+expected:
+  outcome: contradicted
+  evidence: [obs-005-b, obs-005-c]
+  conflicts: []
+  missing: []
+  rationale: >-
+    Vests absent on both the detector output and the inspection record.

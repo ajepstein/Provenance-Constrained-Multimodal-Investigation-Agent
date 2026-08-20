@@ -1,0 +1,96 @@
+case_id: case-003
+title: Supported with irrelevant detections that must be excluded
+tags: [supported, decoy-label]
+
+claim:
+  id: clm-003
+  text: >-
+    The supplied evidence shows that required protective equipment (hard hat
+    and hi-vis vest) was present during inspection INS-2318.
+  predicate: ppe_present
+  deciding_labels: [hard_hat, hi_vis_vest]
+  required_labels: [hard_hat, hi_vis_vest]
+  requires: [image_evidence, detector_evidence, human_record]
+  window_start: "2026-03-09T07:00:00Z"
+  window_end: "2026-03-09T09:00:00Z"
+  site: site-4/pump-house
+
+artifacts:
+  - id: img-003
+    media_type: image
+    uri: s3://inspections/site-4/2026-03-09/img-003.jpg
+    sha256: "11de9a7730cc4b82"
+    captured_at: "2026-03-09T08:14:02Z"
+    captured_by: cam-ph-01
+    uploaded_by: operator:t.lindqvist
+    site: site-4/pump-house
+  - id: note-003
+    media_type: operator_note
+    uri: s3://inspections/site-4/2026-03-09/note-003.txt
+    sha256: "5c8827aa10bf39e4"
+    captured_at: "2026-03-09T08:30:00Z"
+    uploaded_by: operator:t.lindqvist
+    site: site-4/pump-house
+    text: >-
+      Pump house check. Both fitters in full PPE, helmets and vests on
+      throughout. Ladder left unsecured near bay 3 - raised separately.
+
+observations:
+  - id: obs-003-a
+    obs_kind: detection
+    label: hard_hat
+    value: present
+    confidence: 0.95
+    at: "2026-03-09T08:15:00Z"
+    derived_from: [img-003]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-003-b
+    obs_kind: detection
+    label: hi_vis_vest
+    value: present
+    confidence: 0.92
+    at: "2026-03-09T08:15:00Z"
+    derived_from: [img-003]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-003-c
+    obs_kind: detection
+    label: ladder_unsecured
+    value: present
+    confidence: 0.97
+    at: "2026-03-09T08:15:00Z"
+    derived_from: [img-003]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-003-d
+    obs_kind: assertion
+    label: hard_hat
+    value: present
+    text: helmets and vests on throughout
+    span: [39, 70]
+    derived_from: [note-003]
+    producer: {type: human, id: operator:t.lindqvist}
+  - id: obs-003-e
+    obs_kind: assertion
+    label: hi_vis_vest
+    value: present
+    text: helmets and vests on throughout
+    span: [39, 70]
+    derived_from: [note-003]
+    producer: {type: human, id: operator:t.lindqvist}
+  - id: obs-003-f
+    obs_kind: assertion
+    label: ladder_unsecured
+    value: present
+    text: Ladder left unsecured near bay 3
+    span: [72, 103]
+    derived_from: [note-003]
+    producer: {type: human, id: operator:t.lindqvist}
+
+expected:
+  outcome: supported
+  evidence: [obs-003-a, obs-003-b, obs-003-d, obs-003-e]
+  conflicts: []
+  missing: []
+  rationale: >-
+    A high-confidence, entirely valid ladder_unsecured finding bears on a
+    different claim. It must be reported as considered-and-unused, not folded
+    into the PPE conclusion.

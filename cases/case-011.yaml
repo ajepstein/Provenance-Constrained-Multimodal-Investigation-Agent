@@ -1,0 +1,74 @@
+case_id: case-011
+title: Unresolved conflict - detector and operator disagree, both admissible
+tags: [needs_human_review, conflict]
+
+claim:
+  id: clm-011
+  text: >-
+    The supplied evidence shows that required protective equipment (hard hat
+    and hi-vis vest) was present during inspection INS-2414.
+  predicate: ppe_present
+  deciding_labels: [hard_hat, hi_vis_vest]
+  required_labels: [hard_hat, hi_vis_vest]
+  requires: [image_evidence, detector_evidence, human_record]
+  window_start: "2026-03-25T13:00:00Z"
+  window_end: "2026-03-25T15:00:00Z"
+  site: site-7/north-gate
+
+artifacts:
+  - id: img-011
+    media_type: image
+    uri: s3://inspections/site-7/2026-03-25/img-011.jpg
+    sha256: "e7740c1a9b3f2856"
+    captured_at: "2026-03-25T14:08:30Z"
+    captured_by: cam-nw-02
+    uploaded_by: operator:m.okafor
+    site: site-7/north-gate
+  - id: note-011
+    media_type: operator_note
+    uri: s3://inspections/site-7/2026-03-25/note-011.txt
+    sha256: "40b9ce8215a7df36"
+    captured_at: "2026-03-25T14:15:00Z"
+    uploaded_by: operator:m.okafor
+    site: site-7/north-gate
+    text: >-
+      Two workers by the skip had their helmets off for about ten minutes while
+      they moved rebar. Vests stayed on. The camera only covers the gate line,
+      so it will not show the skip.
+
+observations:
+  - id: obs-011-a
+    obs_kind: detection
+    label: hard_hat
+    value: present
+    confidence: 0.88
+    at: "2026-03-25T14:09:00Z"
+    derived_from: [img-011]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-011-b
+    obs_kind: detection
+    label: hi_vis_vest
+    value: present
+    confidence: 0.91
+    at: "2026-03-25T14:09:00Z"
+    derived_from: [img-011]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-011-c
+    obs_kind: assertion
+    label: hard_hat
+    value: absent
+    text: Two workers by the skip had their helmets off
+    span: [0, 45]
+    derived_from: [note-011]
+    producer: {type: human, id: operator:m.okafor}
+
+expected:
+  outcome: needs_human_review
+  evidence: [obs-011-a, obs-011-b, obs-011-c]
+  conflicts: [hard_hat]
+  missing: []
+  rationale: >-
+    Both sources are in-window, on-site, and admissible, and they disagree on
+    hard_hat. The disagreement is real - the camera and the operator saw
+    different parts of the site - so it must be preserved and escalated, not
+    resolved by picking the higher confidence.

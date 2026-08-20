@@ -1,0 +1,72 @@
+case_id: case-016
+title: Low-confidence sole support
+tags: [insufficient, uncertainty]
+
+claim:
+  id: clm-016
+  text: >-
+    The supplied evidence shows that required protective equipment (hard hat
+    and hi-vis vest) was present during inspection INS-2470.
+  predicate: ppe_present
+  deciding_labels: [hard_hat, hi_vis_vest]
+  required_labels: [hard_hat, hi_vis_vest]
+  requires: [image_evidence, detector_evidence, human_record]
+  window_start: "2026-04-06T06:00:00Z"
+  window_end: "2026-04-06T08:00:00Z"
+  site: site-4/pump-house
+
+artifacts:
+  - id: img-016
+    media_type: image
+    uri: s3://inspections/site-4/2026-04-06/img-016.jpg
+    sha256: "0f5b83ca27e194d0"
+    captured_at: "2026-04-06T07:02:00Z"
+    captured_by: cam-ph-01
+    uploaded_by: operator:t.lindqvist
+    site: site-4/pump-house
+  - id: note-016
+    media_type: operator_note
+    uri: s3://inspections/site-4/2026-04-06/note-016.txt
+    sha256: "6db02a95c3f7148e"
+    captured_at: "2026-04-06T07:20:00Z"
+    uploaded_by: operator:t.lindqvist
+    site: site-4/pump-house
+    text: >-
+      Pre-dawn shot, floodlights only. Hard to make anyone out on the image.
+      I did not go past the fence line myself.
+
+observations:
+  - id: obs-016-a
+    obs_kind: detection
+    label: hard_hat
+    value: present
+    confidence: 0.41
+    at: "2026-04-06T07:03:00Z"
+    derived_from: [img-016]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-016-b
+    obs_kind: detection
+    label: hi_vis_vest
+    value: present
+    confidence: 0.38
+    at: "2026-04-06T07:03:00Z"
+    derived_from: [img-016]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-016-c
+    obs_kind: assertion
+    label: visibility
+    value: poor
+    text: Hard to make anyone out on the image
+    span: [33, 69]
+    derived_from: [note-016]
+    producer: {type: human, id: operator:t.lindqvist}
+
+expected:
+  outcome: insufficient_evidence
+  evidence: []
+  conflicts: []
+  missing: [image_evidence, detector_evidence]
+  rationale: >-
+    Both detections sit below the confidence floor and the operator explicitly
+    declines to vouch for what is in the frame. Nothing here is admissible; the
+    honest answer is that the case does not decide.

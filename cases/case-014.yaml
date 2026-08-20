@@ -1,0 +1,71 @@
+case_id: case-014
+title: Missing information - capture time unknown after an EXIF strip
+tags: [insufficient, missing-metadata]
+
+claim:
+  id: clm-014
+  text: >-
+    The supplied evidence shows that required protective equipment (hard hat
+    and hi-vis vest) was present during inspection INS-2448.
+  predicate: ppe_present
+  deciding_labels: [hard_hat, hi_vis_vest]
+  required_labels: [hard_hat, hi_vis_vest]
+  requires: [image_evidence, detector_evidence, human_record]
+  window_start: "2026-04-01T12:00:00Z"
+  window_end: "2026-04-01T14:00:00Z"
+  site: site-4/pump-house
+
+artifacts:
+  - id: img-014
+    media_type: image
+    uri: s3://inspections/site-4/2026-04-01/img-014.jpg
+    sha256: "31c7de9004ab5f26"
+    captured_by: null
+    uploaded_by: operator:m.okafor
+    site: site-4/pump-house
+  - id: note-014
+    media_type: operator_note
+    uri: s3://inspections/site-4/2026-04-01/note-014.txt
+    sha256: "c60a19f7b3428de5"
+    captured_at: "2026-04-01T13:40:00Z"
+    uploaded_by: operator:m.okafor
+    site: site-4/pump-house
+    text: >-
+      Phone gallery upload, the handset strips location and time metadata on
+      export. Believe this is from the midday walkthrough. PPE was on.
+
+observations:
+  - id: obs-014-a
+    obs_kind: detection
+    label: hard_hat
+    value: present
+    confidence: 0.92
+    at: "2026-04-01T13:44:00Z"
+    derived_from: [img-014]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-014-b
+    obs_kind: detection
+    label: hi_vis_vest
+    value: present
+    confidence: 0.89
+    at: "2026-04-01T13:44:00Z"
+    derived_from: [img-014]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-014-c
+    obs_kind: assertion
+    label: hard_hat
+    value: present
+    text: PPE was on
+    span: [110, 120]
+    derived_from: [note-014]
+    producer: {type: human, id: operator:m.okafor}
+
+expected:
+  outcome: insufficient_evidence
+  evidence: [obs-014-c]
+  conflicts: []
+  missing: [image_evidence, detector_evidence]
+  rationale: >-
+    The image has no capture time, so it cannot be placed inside the
+    inspection window. Unknown must stay unknown - the operator's belief about
+    when the photo was taken is not a timestamp.

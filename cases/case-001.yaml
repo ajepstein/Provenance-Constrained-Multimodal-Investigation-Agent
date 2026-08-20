@@ -1,0 +1,79 @@
+case_id: case-001
+title: Clean supported case
+tags: [supported, clean]
+
+claim:
+  id: clm-001
+  text: >-
+    The supplied evidence shows that required protective equipment (hard hat
+    and hi-vis vest) was present during inspection INS-2291.
+  predicate: ppe_present
+  deciding_labels: [hard_hat, hi_vis_vest]
+  required_labels: [hard_hat, hi_vis_vest]
+  requires: [image_evidence, detector_evidence, human_record]
+  window_start: "2026-03-04T13:00:00Z"
+  window_end: "2026-03-04T15:00:00Z"
+  site: site-7/north-gate
+
+artifacts:
+  - id: img-001
+    media_type: image
+    uri: s3://inspections/site-7/2026-03-04/img-001.jpg
+    sha256: "3f2a91c0b7d4e618"
+    captured_at: "2026-03-04T14:02:11Z"
+    captured_by: cam-nw-02
+    uploaded_by: operator:j.reyes
+    site: site-7/north-gate
+  - id: note-001
+    media_type: operator_note
+    uri: s3://inspections/site-7/2026-03-04/note-001.txt
+    sha256: "8c1d55ee02a9b731"
+    captured_at: "2026-03-04T14:20:00Z"
+    uploaded_by: operator:j.reyes
+    site: site-7/north-gate
+    text: >-
+      Walked the north gate with the crew at 14:00. All four workers in hard
+      hats and hi-vis vests. Nothing to flag.
+
+observations:
+  - id: obs-001-a
+    obs_kind: detection
+    label: hard_hat
+    value: present
+    confidence: 0.93
+    at: "2026-03-04T14:05:00Z"
+    derived_from: [img-001]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-001-b
+    obs_kind: detection
+    label: hi_vis_vest
+    value: present
+    confidence: 0.89
+    at: "2026-03-04T14:05:00Z"
+    derived_from: [img-001]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-001-c
+    obs_kind: assertion
+    label: hard_hat
+    value: present
+    text: All four workers in hard hats
+    span: [61, 90]
+    derived_from: [note-001]
+    producer: {type: human, id: operator:j.reyes}
+  - id: obs-001-d
+    obs_kind: assertion
+    label: hi_vis_vest
+    value: present
+    text: and hi-vis vests
+    span: [91, 107]
+    derived_from: [note-001]
+    producer: {type: human, id: operator:j.reyes}
+
+expected:
+  outcome: supported
+  evidence: [obs-001-a, obs-001-b, obs-001-c, obs-001-d]
+  conflicts: []
+  missing: []
+  rationale: >-
+    Both required labels are observed present by an approved detector version
+    on an in-window image, and corroborated by the operator note.

@@ -1,0 +1,54 @@
+case_id: case-006
+title: Missing required evidence - no human record
+tags: [insufficient, missing-requirement]
+
+claim:
+  id: clm-006
+  text: >-
+    The supplied evidence shows that required protective equipment (hard hat
+    and hi-vis vest) was present during inspection INS-2355.
+  predicate: ppe_present
+  deciding_labels: [hard_hat, hi_vis_vest]
+  required_labels: [hard_hat, hi_vis_vest]
+  requires: [image_evidence, detector_evidence, human_record]
+  window_start: "2026-03-14T08:00:00Z"
+  window_end: "2026-03-14T10:00:00Z"
+  site: site-7/north-gate
+
+artifacts:
+  - id: img-006
+    media_type: image
+    uri: s3://inspections/site-7/2026-03-14/img-006.jpg
+    sha256: "77c1ba0e59d3f428"
+    captured_at: "2026-03-14T09:03:55Z"
+    captured_by: cam-nw-02
+    uploaded_by: operator:j.reyes
+    site: site-7/north-gate
+
+observations:
+  - id: obs-006-a
+    obs_kind: detection
+    label: hard_hat
+    value: present
+    confidence: 0.94
+    at: "2026-03-14T09:04:20Z"
+    derived_from: [img-006]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-006-b
+    obs_kind: detection
+    label: hi_vis_vest
+    value: present
+    confidence: 0.90
+    at: "2026-03-14T09:04:20Z"
+    derived_from: [img-006]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+
+expected:
+  outcome: insufficient_evidence
+  evidence: [obs-006-a, obs-006-b]
+  conflicts: []
+  missing: [human_record]
+  rationale: >-
+    Detections look clean, but no operator note or inspection record was
+    supplied. The policy requires a human record; the agent must say what is
+    missing rather than conclude from the images alone.

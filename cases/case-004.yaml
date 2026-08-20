@@ -1,0 +1,71 @@
+case_id: case-004
+title: Clearly contradicted - hard hats absent
+tags: [contradicted, clean]
+
+claim:
+  id: clm-004
+  text: >-
+    The supplied evidence shows that required protective equipment (hard hat
+    and hi-vis vest) was present during inspection INS-2330.
+  predicate: ppe_present
+  deciding_labels: [hard_hat, hi_vis_vest]
+  required_labels: [hard_hat, hi_vis_vest]
+  requires: [image_evidence, detector_evidence, human_record]
+  window_start: "2026-03-11T12:00:00Z"
+  window_end: "2026-03-11T14:00:00Z"
+  site: site-7/north-gate
+
+artifacts:
+  - id: img-004
+    media_type: image
+    uri: s3://inspections/site-7/2026-03-11/img-004.jpg
+    sha256: "9b0e4471c2ad5f10"
+    captured_at: "2026-03-11T13:22:40Z"
+    captured_by: cam-nw-02
+    uploaded_by: operator:j.reyes
+    site: site-7/north-gate
+  - id: note-004
+    media_type: operator_note
+    uri: s3://inspections/site-7/2026-03-11/note-004.txt
+    sha256: "62aa30c8f19be745"
+    captured_at: "2026-03-11T13:35:00Z"
+    uploaded_by: operator:j.reyes
+    site: site-7/north-gate
+    text: >-
+      Two of the three workers at the gate were bare-headed for the duration of
+      the walkthrough. Vests were on. Flagged to the site lead.
+
+observations:
+  - id: obs-004-a
+    obs_kind: detection
+    label: hard_hat
+    value: absent
+    confidence: 0.92
+    at: "2026-03-11T13:23:10Z"
+    derived_from: [img-004]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-004-b
+    obs_kind: detection
+    label: hi_vis_vest
+    value: present
+    confidence: 0.90
+    at: "2026-03-11T13:23:10Z"
+    derived_from: [img-004]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-004-c
+    obs_kind: assertion
+    label: hard_hat
+    value: absent
+    text: Two of the three workers at the gate were bare-headed
+    span: [0, 52]
+    derived_from: [note-004]
+    producer: {type: human, id: operator:j.reyes}
+
+expected:
+  outcome: contradicted
+  evidence: [obs-004-a, obs-004-c]
+  conflicts: []
+  missing: []
+  rationale: >-
+    Detector and operator agree that hard hats were absent. One required label
+    failing is enough to contradict the claim.

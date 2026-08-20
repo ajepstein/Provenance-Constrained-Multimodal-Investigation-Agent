@@ -1,0 +1,95 @@
+case_id: case-002
+title: Supported through a benign transformation chain
+tags: [supported, transformation]
+
+claim:
+  id: clm-002
+  text: >-
+    The supplied evidence shows that required protective equipment (hard hat
+    and hi-vis vest) was present during inspection INS-2304.
+  predicate: ppe_present
+  deciding_labels: [hard_hat, hi_vis_vest]
+  required_labels: [hard_hat, hi_vis_vest]
+  requires: [image_evidence, detector_evidence, human_record]
+  window_start: "2026-03-06T09:00:00Z"
+  window_end: "2026-03-06T11:00:00Z"
+  site: site-7/north-gate
+
+artifacts:
+  - id: img-002-raw
+    media_type: image
+    uri: s3://inspections/site-7/2026-03-06/img-002-raw.dng
+    sha256: "c40b7712ae95f003"
+    captured_at: "2026-03-06T10:11:47Z"
+    captured_by: cam-nw-02
+    uploaded_by: operator:m.okafor
+    site: site-7/north-gate
+  - id: img-002-web
+    media_type: image
+    uri: s3://inspections/site-7/2026-03-06/img-002-web.jpg
+    sha256: "7ab3c0119de4f265"
+  - id: note-002
+    media_type: inspection_record
+    uri: s3://inspections/site-7/2026-03-06/ins-2304.json
+    sha256: "e2119f7a4c0d8b56"
+    captured_at: "2026-03-06T10:40:00Z"
+    uploaded_by: operator:m.okafor
+    site: site-7/north-gate
+    text: >-
+      INS-2304 north gate walkthrough. PPE check passed: hard hats and vests
+      worn by both technicians on the lift.
+
+transformations:
+  - id: tf-002
+    op: resize
+    tool: preproc
+    tool_version: "1.4.0"
+    at: "2026-03-06T10:12:03Z"
+    params: {longest_edge: 1600, resample: lanczos}
+    evidence_affecting: false
+    inputs: [img-002-raw]
+    outputs: [img-002-web]
+
+observations:
+  - id: obs-002-a
+    obs_kind: detection
+    label: hard_hat
+    value: present
+    confidence: 0.91
+    at: "2026-03-06T10:12:30Z"
+    derived_from: [img-002-web]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-002-b
+    obs_kind: detection
+    label: hi_vis_vest
+    value: present
+    confidence: 0.87
+    at: "2026-03-06T10:12:30Z"
+    derived_from: [img-002-web]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-002-c
+    obs_kind: assertion
+    label: hard_hat
+    value: present
+    text: hard hats and vests worn by both technicians
+    span: [46, 90]
+    derived_from: [note-002]
+    producer: {type: human, id: operator:m.okafor}
+  - id: obs-002-d
+    obs_kind: assertion
+    label: hi_vis_vest
+    value: present
+    text: hard hats and vests worn by both technicians
+    span: [46, 90]
+    derived_from: [note-002]
+    producer: {type: human, id: operator:m.okafor}
+
+expected:
+  outcome: supported
+  evidence: [obs-002-a, obs-002-b, obs-002-c, obs-002-d]
+  conflicts: []
+  missing: []
+  rationale: >-
+    The detections ran on a resized derivative, but the resize is not
+    evidence-affecting and the chain traces to an in-window, on-site original.
+    Provenance strictness must not block this case.

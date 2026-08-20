@@ -1,0 +1,80 @@
+case_id: case-017
+title: Broken provenance - source file has no hash and no uploader
+tags: [needs_human_review, provenance-gap]
+
+claim:
+  id: clm-017
+  text: >-
+    The supplied evidence shows that required protective equipment (hard hat
+    and hi-vis vest) was present during inspection INS-2481.
+  predicate: ppe_present
+  deciding_labels: [hard_hat, hi_vis_vest]
+  required_labels: [hard_hat, hi_vis_vest]
+  requires: [image_evidence, detector_evidence, human_record]
+  window_start: "2026-04-08T11:00:00Z"
+  window_end: "2026-04-08T13:00:00Z"
+  site: site-7/north-gate
+
+artifacts:
+  - id: img-017
+    media_type: image
+    uri: file:///tmp/ingest-retry/unknown-0042.jpg
+    sha256: null
+    captured_at: "2026-04-08T12:05:00Z"
+    captured_by: null
+    uploaded_by: null
+    site: site-7/north-gate
+  - id: note-017
+    media_type: operator_note
+    uri: s3://inspections/site-7/2026-04-08/note-017.txt
+    sha256: "d90c47ab13f2568e"
+    captured_at: "2026-04-08T12:30:00Z"
+    uploaded_by: operator:j.reyes
+    site: site-7/north-gate
+    text: >-
+      Ingest retried twice after the gateway dropped. Not sure which upload
+      made it through. Crew were in full PPE at the gate.
+
+observations:
+  - id: obs-017-a
+    obs_kind: detection
+    label: hard_hat
+    value: present
+    confidence: 0.90
+    at: "2026-04-08T12:10:00Z"
+    derived_from: [img-017]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-017-b
+    obs_kind: detection
+    label: hi_vis_vest
+    value: present
+    confidence: 0.86
+    at: "2026-04-08T12:10:00Z"
+    derived_from: [img-017]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-017-c
+    obs_kind: assertion
+    label: hard_hat
+    value: present
+    text: Crew were in full PPE at the gate
+    span: [79, 112]
+    derived_from: [note-017]
+    producer: {type: human, id: operator:j.reyes}
+  - id: obs-017-d
+    obs_kind: assertion
+    label: hi_vis_vest
+    value: present
+    text: Crew were in full PPE at the gate
+    span: [79, 112]
+    derived_from: [note-017]
+    producer: {type: human, id: operator:j.reyes}
+
+expected:
+  outcome: needs_human_review
+  evidence: [obs-017-c, obs-017-d]
+  conflicts: []
+  missing: [image_evidence, detector_evidence]
+  rationale: >-
+    The image cannot be tied to a hash or an uploader, so nothing downstream of
+    it can be trusted or reproduced. That is an ingest failure a person has to
+    resolve, not a claim the agent can decide either way.

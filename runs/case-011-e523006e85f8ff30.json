@@ -1,0 +1,213 @@
+{
+  "schema_version": "1.0",
+  "case_id": "case-011",
+  "claim": {
+    "id": "clm-011",
+    "text": "The supplied evidence shows that required protective equipment (hard hat and hi-vis vest) was present during inspection INS-2414.",
+    "site": "site-7/north-gate",
+    "window": [
+      "2026-03-25T13:00:00Z",
+      "2026-03-25T15:00:00Z"
+    ]
+  },
+  "question": "Case: case-011\nClaim to evaluate: The supplied evidence shows that required protective equipment (hard hat and hi-vis vest) was present during inspection INS-2414.\nSite: site-7/north-gate\nInspection window: 2026-03-25T13:00:00Z to 2026-03-25T15:00:00Z\n\nDetermine whether the recorded evidence supports this claim.",
+  "model": "stub:careful",
+  "policy": {
+    "approved_models": {
+      "ppe-detector": "2.3.0"
+    },
+    "min_confidence": 0.6,
+    "window_slack_minutes": 0
+  },
+  "evidence_graph": {
+    "digest": "cae636c067775451",
+    "node_count": 6,
+    "edge_count": 3
+  },
+  "tool_calls": [
+    {
+      "seq": 1,
+      "name": "retrieve_evidence",
+      "arguments": {
+        "question": "Case: case-011\nClaim to evaluate: The supplied evidence shows that required protective equipment (hard hat and hi-vis vest) was present during inspection INS-2414.\nSite: site-7/north-gate\nInspection window: 2026-03-25T13:00:00Z to 2026-03-25T15:00:00Z\n\nDetermine whether the recorded evidence supports this claim."
+      },
+      "result_digest": "d95d6566b171",
+      "result_ids": [
+        "clm-011",
+        "img-011",
+        "note-011",
+        "obs-011-a",
+        "obs-011-b",
+        "obs-011-c"
+      ]
+    },
+    {
+      "seq": 2,
+      "name": "inspect_provenance",
+      "arguments": {
+        "item_id": "obs-011-b"
+      },
+      "result_digest": "550b57eaea97",
+      "result_ids": [
+        "img-011",
+        "obs-011-b"
+      ]
+    },
+    {
+      "seq": 3,
+      "name": "record_decision",
+      "arguments": {
+        "outcome": "needs_human_review",
+        "assertions": [
+          {
+            "statement": "hi_vis_vest is present",
+            "cited": [
+              "obs-011-b"
+            ]
+          },
+          {
+            "statement": "hard_hat is present",
+            "cited": [
+              "obs-011-a"
+            ]
+          },
+          {
+            "statement": "hard_hat is absent",
+            "cited": [
+              "obs-011-c"
+            ]
+          }
+        ],
+        "evidence_used": [
+          "obs-011-b",
+          "obs-011-a",
+          "obs-011-c"
+        ],
+        "evidence_not_used": [],
+        "summary": "Admissible sources disagree on a required item; escalating rather than choosing between them."
+      },
+      "result_digest": "58b2d6bba52d",
+      "result_ids": [
+        "obs-011-a",
+        "obs-011-c"
+      ]
+    }
+  ],
+  "agent_decision": {
+    "outcome": "needs_human_review",
+    "summary": "Admissible sources disagree on a required item; escalating rather than choosing between them.",
+    "assertions": [
+      {
+        "statement": "hi_vis_vest is present",
+        "cited": [
+          "obs-011-b"
+        ]
+      },
+      {
+        "statement": "hard_hat is present",
+        "cited": [
+          "obs-011-a"
+        ]
+      },
+      {
+        "statement": "hard_hat is absent",
+        "cited": [
+          "obs-011-c"
+        ]
+      }
+    ],
+    "evidence_used": [
+      "obs-011-b",
+      "obs-011-a",
+      "obs-011-c"
+    ],
+    "evidence_not_used": []
+  },
+  "validation": {
+    "violations": [
+      {
+        "code": "UNRESOLVED_CONFLICT",
+        "severity": "escalate",
+        "message": "hard_hat: obs-011-a says present while obs-011-c says absent; both sources are admissible and in scope",
+        "refs": [
+          "obs-011-a",
+          "obs-011-c"
+        ]
+      }
+    ],
+    "citations_admitted": [
+      "obs-011-a",
+      "obs-011-b",
+      "obs-011-c"
+    ],
+    "citations_rejected": []
+  },
+  "unresolved_conflicts": [
+    {
+      "label": "hard_hat",
+      "positive": "obs-011-a",
+      "negative": "obs-011-c"
+    }
+  ],
+  "missing_requirements": [],
+  "evidence_detail": [
+    {
+      "id": "obs-011-a",
+      "label": "hard_hat",
+      "value": "present",
+      "confidence": 0.88,
+      "produced_by": "ppe-detector@2.4.1",
+      "transformations": [],
+      "roots": [
+        {
+          "id": "img-011",
+          "uri": "s3://inspections/site-7/2026-03-25/img-011.jpg",
+          "sha256": "e7740c1a9b3f2856",
+          "captured_at": "2026-03-25T14:08:30Z",
+          "site": "site-7/north-gate"
+        }
+      ],
+      "defects": []
+    },
+    {
+      "id": "obs-011-b",
+      "label": "hi_vis_vest",
+      "value": "present",
+      "confidence": 0.91,
+      "produced_by": "ppe-detector@2.4.1",
+      "transformations": [],
+      "roots": [
+        {
+          "id": "img-011",
+          "uri": "s3://inspections/site-7/2026-03-25/img-011.jpg",
+          "sha256": "e7740c1a9b3f2856",
+          "captured_at": "2026-03-25T14:08:30Z",
+          "site": "site-7/north-gate"
+        }
+      ],
+      "defects": []
+    },
+    {
+      "id": "obs-011-c",
+      "label": "hard_hat",
+      "value": "absent",
+      "confidence": null,
+      "produced_by": "operator:m.okafor",
+      "transformations": [],
+      "roots": [
+        {
+          "id": "note-011",
+          "uri": "s3://inspections/site-7/2026-03-25/note-011.txt",
+          "sha256": "40b9ce8215a7df36",
+          "captured_at": "2026-03-25T14:15:00Z",
+          "site": "site-7/north-gate"
+        }
+      ],
+      "defects": []
+    }
+  ],
+  "final_outcome": "needs_human_review",
+  "outcome_changed_by_validator": false,
+  "content_hash": "e523006e85f8ff30",
+  "produced_at": "2026-08-20T19:52:39+00:00"
+}

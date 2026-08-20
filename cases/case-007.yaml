@@ -1,0 +1,63 @@
+case_id: case-007
+title: Missing required evidence - note only, nothing observed from the image
+tags: [insufficient, missing-requirement]
+
+claim:
+  id: clm-007
+  text: >-
+    The supplied evidence shows that required protective equipment (hard hat
+    and hi-vis vest) was present during inspection INS-2362.
+  predicate: ppe_present
+  deciding_labels: [hard_hat, hi_vis_vest]
+  required_labels: [hard_hat, hi_vis_vest]
+  requires: [image_evidence, detector_evidence, human_record]
+  window_start: "2026-03-16T13:00:00Z"
+  window_end: "2026-03-16T15:00:00Z"
+  site: site-4/pump-house
+
+artifacts:
+  - id: img-007
+    media_type: image
+    uri: s3://inspections/site-4/2026-03-16/img-007.jpg
+    sha256: "2ef0c9a4471bd830"
+    captured_at: "2026-03-16T14:12:00Z"
+    captured_by: cam-ph-01
+    uploaded_by: operator:t.lindqvist
+    site: site-4/pump-house
+  - id: note-007
+    media_type: operator_note
+    uri: s3://inspections/site-4/2026-03-16/note-007.txt
+    sha256: "b81a5533ce70d9f2"
+    captured_at: "2026-03-16T14:30:00Z"
+    uploaded_by: operator:t.lindqvist
+    site: site-4/pump-house
+    text: >-
+      Routine check, crew in helmets and vests. Camera upload was slow so the
+      detector queue had not run by the time I closed the record.
+
+observations:
+  - id: obs-007-a
+    obs_kind: assertion
+    label: hard_hat
+    value: present
+    text: crew in helmets and vests
+    span: [15, 40]
+    derived_from: [note-007]
+    producer: {type: human, id: operator:t.lindqvist}
+  - id: obs-007-b
+    obs_kind: assertion
+    label: hi_vis_vest
+    value: present
+    text: crew in helmets and vests
+    span: [15, 40]
+    derived_from: [note-007]
+    producer: {type: human, id: operator:t.lindqvist}
+
+expected:
+  outcome: insufficient_evidence
+  evidence: [obs-007-a, obs-007-b]
+  conflicts: []
+  missing: [image_evidence, detector_evidence]
+  rationale: >-
+    An image exists but nothing was ever observed from it, so it grounds no
+    evidence. A visual-inspection claim cannot rest on the operator note alone.

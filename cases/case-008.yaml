@@ -1,0 +1,72 @@
+case_id: case-008
+title: Stale evidence - image captured three days before the window
+tags: [insufficient, stale]
+
+claim:
+  id: clm-008
+  text: >-
+    The supplied evidence shows that required protective equipment (hard hat
+    and hi-vis vest) was present during inspection INS-2377.
+  predicate: ppe_present
+  deciding_labels: [hard_hat, hi_vis_vest]
+  required_labels: [hard_hat, hi_vis_vest]
+  requires: [image_evidence, detector_evidence, human_record]
+  window_start: "2026-03-18T09:00:00Z"
+  window_end: "2026-03-18T11:00:00Z"
+  site: site-7/north-gate
+
+artifacts:
+  - id: img-008
+    media_type: image
+    uri: s3://inspections/site-7/2026-03-15/img-008.jpg
+    sha256: "d51c7f22b9a0e463"
+    captured_at: "2026-03-15T10:05:00Z"
+    captured_by: cam-nw-02
+    uploaded_by: operator:j.reyes
+    site: site-7/north-gate
+  - id: note-008
+    media_type: operator_note
+    uri: s3://inspections/site-7/2026-03-18/note-008.txt
+    sha256: "3aa9e0177c4b6d85"
+    captured_at: "2026-03-18T10:20:00Z"
+    uploaded_by: operator:j.reyes
+    site: site-7/north-gate
+    text: >-
+      Reusing the gate photo from the 15th, the crew and setup are the same.
+      PPE was worn as usual.
+
+observations:
+  - id: obs-008-a
+    obs_kind: detection
+    label: hard_hat
+    value: present
+    confidence: 0.96
+    at: "2026-03-18T10:22:00Z"
+    derived_from: [img-008]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-008-b
+    obs_kind: detection
+    label: hi_vis_vest
+    value: present
+    confidence: 0.93
+    at: "2026-03-18T10:22:00Z"
+    derived_from: [img-008]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-008-c
+    obs_kind: assertion
+    label: hard_hat
+    value: present
+    text: PPE was worn as usual
+    span: [63, 84]
+    derived_from: [note-008]
+    producer: {type: human, id: operator:j.reyes}
+
+expected:
+  outcome: insufficient_evidence
+  evidence: [obs-008-c]
+  conflicts: []
+  missing: [image_evidence, detector_evidence]
+  rationale: >-
+    The detections are confident and correctly produced, but the image they
+    describe was captured three days outside the inspection window. Freshness
+    is a property of the source, not of the detector output.

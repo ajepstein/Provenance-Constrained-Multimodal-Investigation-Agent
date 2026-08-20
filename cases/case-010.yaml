@@ -1,0 +1,88 @@
+case_id: case-010
+title: Misleading decoy - confident detections from the adjacent site
+tags: [insufficient, adversarial, decoy]
+
+claim:
+  id: clm-010
+  text: >-
+    The supplied evidence shows that required protective equipment (hard hat
+    and hi-vis vest) was present during inspection INS-2401.
+  predicate: ppe_present
+  deciding_labels: [hard_hat, hi_vis_vest]
+  required_labels: [hard_hat, hi_vis_vest]
+  requires: [image_evidence, detector_evidence, human_record]
+  window_start: "2026-03-23T10:00:00Z"
+  window_end: "2026-03-23T12:00:00Z"
+  site: site-7/north-gate
+
+artifacts:
+  - id: img-010-north
+    media_type: image
+    uri: s3://inspections/site-7/2026-03-23/img-010-north.jpg
+    sha256: "1c8bb3f0a4276de9"
+    captured_at: "2026-03-23T11:07:00Z"
+    captured_by: cam-nw-02
+    uploaded_by: operator:j.reyes
+    site: site-7/north-gate
+  - id: img-010-south
+    media_type: image
+    uri: s3://inspections/site-7/2026-03-23/img-010-south.jpg
+    sha256: "aa0741c9be62305d"
+    captured_at: "2026-03-23T11:09:00Z"
+    captured_by: cam-sw-01
+    uploaded_by: operator:j.reyes
+    site: site-7/south-gate
+  - id: note-010
+    media_type: operator_note
+    uri: s3://inspections/site-7/2026-03-23/note-010.txt
+    sha256: "58cd12a7409be3f1"
+    captured_at: "2026-03-23T11:30:00Z"
+    uploaded_by: operator:j.reyes
+    site: site-7/north-gate
+    text: >-
+      Attached both gate photos in one upload. North gate crew were in helmets
+      and vests when I passed through.
+
+observations:
+  - id: obs-010-a
+    obs_kind: detection
+    label: hard_hat
+    value: present
+    confidence: 0.96
+    at: "2026-03-23T11:10:00Z"
+    derived_from: [img-010-south]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-010-b
+    obs_kind: detection
+    label: hi_vis_vest
+    value: present
+    confidence: 0.94
+    at: "2026-03-23T11:10:00Z"
+    derived_from: [img-010-south]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-010-c
+    obs_kind: assertion
+    label: hard_hat
+    value: present
+    text: North gate crew were in helmets and vests
+    span: [41, 81]
+    derived_from: [note-010]
+    producer: {type: human, id: operator:j.reyes}
+  - id: obs-010-d
+    obs_kind: assertion
+    label: hi_vis_vest
+    value: present
+    text: North gate crew were in helmets and vests
+    span: [41, 81]
+    derived_from: [note-010]
+    producer: {type: human, id: operator:j.reyes}
+
+expected:
+  outcome: insufficient_evidence
+  evidence: [obs-010-c, obs-010-d]
+  conflicts: []
+  missing: [image_evidence, detector_evidence]
+  rationale: >-
+    The two confident detections are real, recent, and produced by the approved
+    detector - but they describe the south gate. Everything about them looks
+    right except what they are about.

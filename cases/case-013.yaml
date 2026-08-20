@@ -1,0 +1,93 @@
+case_id: case-013
+title: Supersession resolves an apparent conflict
+tags: [contradicted, version, supersession]
+
+claim:
+  id: clm-013
+  text: >-
+    The supplied evidence shows that required protective equipment (hard hat
+    and hi-vis vest) was present during inspection INS-2437.
+  predicate: ppe_present
+  deciding_labels: [hard_hat, hi_vis_vest]
+  required_labels: [hard_hat, hi_vis_vest]
+  requires: [image_evidence, detector_evidence, human_record]
+  window_start: "2026-03-30T08:00:00Z"
+  window_end: "2026-03-30T10:00:00Z"
+  site: site-7/north-gate
+
+artifacts:
+  - id: img-013-v1
+    media_type: image
+    uri: s3://inspections/site-7/2026-03-30/img-013.jpg?version=1
+    sha256: "5a1f38ce70b9427d"
+    captured_at: "2026-03-30T09:14:00Z"
+    captured_by: cam-nw-02
+    uploaded_by: operator:j.reyes
+    site: site-7/north-gate
+  - id: img-013-v2
+    media_type: image
+    uri: s3://inspections/site-7/2026-03-30/img-013.jpg?version=2
+    sha256: "ea6c045b21d7f398"
+    captured_at: "2026-03-30T09:14:00Z"
+    captured_by: cam-nw-02
+    uploaded_by: operator:j.reyes
+    site: site-7/north-gate
+  - id: note-013
+    media_type: inspection_record
+    uri: s3://inspections/site-7/2026-03-30/ins-2437.json
+    sha256: "9d43b7100ce825af"
+    captured_at: "2026-03-30T09:45:00Z"
+    uploaded_by: operator:j.reyes
+    site: site-7/north-gate
+    text: >-
+      Re-uploaded the gate photo - the first upload was the wrong frame from
+      the south bay camera buffer. Corrected file attached. On the corrected
+      frame the two workers at the gate are not wearing hard hats.
+
+supersedes:
+  img-013-v1: img-013-v2
+
+observations:
+  - id: obs-013-a
+    obs_kind: detection
+    label: hard_hat
+    value: present
+    confidence: 0.94
+    at: "2026-03-30T09:15:00Z"
+    derived_from: [img-013-v1]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-013-b
+    obs_kind: detection
+    label: hard_hat
+    value: absent
+    confidence: 0.87
+    at: "2026-03-30T09:50:00Z"
+    derived_from: [img-013-v2]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-013-c
+    obs_kind: detection
+    label: hi_vis_vest
+    value: present
+    confidence: 0.90
+    at: "2026-03-30T09:50:00Z"
+    derived_from: [img-013-v2]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-013-d
+    obs_kind: assertion
+    label: hard_hat
+    value: absent
+    text: the two workers at the gate are not wearing hard hats
+    span: [131, 183]
+    derived_from: [note-013]
+    producer: {type: human, id: operator:j.reyes}
+
+expected:
+  outcome: contradicted
+  evidence: [obs-013-b, obs-013-d]
+  conflicts: []
+  missing: []
+  rationale: >-
+    The present/absent pair is only an apparent conflict: the supporting
+    detection rests on a file that was explicitly superseded. Version lineage
+    resolves it, and the higher-confidence observation is the wrong one to
+    follow.

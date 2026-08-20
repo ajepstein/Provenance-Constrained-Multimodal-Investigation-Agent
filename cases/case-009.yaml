@@ -1,0 +1,72 @@
+case_id: case-009
+title: Wrong detector version - output from a deprecated model
+tags: [insufficient, version]
+
+claim:
+  id: clm-009
+  text: >-
+    The supplied evidence shows that required protective equipment (hard hat
+    and hi-vis vest) was present during inspection INS-2388.
+  predicate: ppe_present
+  deciding_labels: [hard_hat, hi_vis_vest]
+  required_labels: [hard_hat, hi_vis_vest]
+  requires: [image_evidence, detector_evidence, human_record]
+  window_start: "2026-03-20T14:00:00Z"
+  window_end: "2026-03-20T16:00:00Z"
+  site: site-4/pump-house
+
+artifacts:
+  - id: img-009
+    media_type: image
+    uri: s3://inspections/site-4/2026-03-20/img-009.jpg
+    sha256: "6c22de84f0179bb3"
+    captured_at: "2026-03-20T15:11:30Z"
+    captured_by: cam-ph-01
+    uploaded_by: operator:m.okafor
+    site: site-4/pump-house
+  - id: note-009
+    media_type: operator_note
+    uri: s3://inspections/site-4/2026-03-20/note-009.txt
+    sha256: "9e01ab5c33f7d264"
+    captured_at: "2026-03-20T15:30:00Z"
+    uploaded_by: operator:m.okafor
+    site: site-4/pump-house
+    text: >-
+      Backlog re-run on the old pipeline node. Crew looked properly kitted out
+      from where I stood, but I was not close enough to be certain.
+
+observations:
+  - id: obs-009-a
+    obs_kind: detection
+    label: hard_hat
+    value: present
+    confidence: 0.97
+    at: "2026-03-20T15:12:00Z"
+    derived_from: [img-009]
+    producer: {type: model, id: ppe-detector, version: "1.9.0"}
+  - id: obs-009-b
+    obs_kind: detection
+    label: hi_vis_vest
+    value: present
+    confidence: 0.95
+    at: "2026-03-20T15:12:00Z"
+    derived_from: [img-009]
+    producer: {type: model, id: ppe-detector, version: "1.9.0"}
+  - id: obs-009-c
+    obs_kind: assertion
+    label: hard_hat
+    value: present
+    text: Crew looked properly kitted out
+    span: [44, 75]
+    derived_from: [note-009]
+    producer: {type: human, id: operator:m.okafor}
+
+expected:
+  outcome: insufficient_evidence
+  evidence: [obs-009-c]
+  conflicts: []
+  missing: [image_evidence, detector_evidence]
+  rationale: >-
+    ppe-detector 1.9.0 is below the approved 2.3.0 floor - it is the version
+    known to fire on reflective tape. High confidence from an unapproved
+    version is not evidence.

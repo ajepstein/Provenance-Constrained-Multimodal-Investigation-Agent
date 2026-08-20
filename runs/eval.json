@@ -1,0 +1,106 @@
+{
+  "cases": 17,
+  "systems": [
+    {
+      "system": "baseline(stub)",
+      "cases": 17,
+      "outcome_accuracy": 0.2941,
+      "silent_error_rate": 0.7059,
+      "citation_validity": 0.6957,
+      "citation_recall": 0.8542,
+      "correct_abstention": 0.0,
+      "over_abstention": 0.0,
+      "conflict_recall": 0.0,
+      "unsupported_claim_rate": 0.4118,
+      "silent_errors": [
+        "case-005",
+        "case-006",
+        "case-007",
+        "case-008",
+        "case-009",
+        "case-010",
+        "case-011",
+        "case-012",
+        "case-013",
+        "case-014",
+        "case-016",
+        "case-017"
+      ],
+      "wrong_outcomes": [
+        "case-005",
+        "case-006",
+        "case-007",
+        "case-008",
+        "case-009",
+        "case-010",
+        "case-011",
+        "case-012",
+        "case-013",
+        "case-014",
+        "case-016",
+        "case-017"
+      ]
+    },
+    {
+      "system": "agent(stub)",
+      "cases": 17,
+      "outcome_accuracy": 0.8824,
+      "silent_error_rate": 0.0,
+      "citation_validity": 1.0,
+      "citation_recall": 0.8542,
+      "correct_abstention": 1.0,
+      "over_abstention": 0.2857,
+      "conflict_recall": 1.0,
+      "unsupported_claim_rate": 0.0,
+      "silent_errors": [],
+      "wrong_outcomes": [
+        "case-005",
+        "case-013"
+      ]
+    },
+    {
+      "system": "agent(careful)",
+      "cases": 17,
+      "outcome_accuracy": 1.0,
+      "silent_error_rate": 0.0,
+      "citation_validity": 1.0,
+      "citation_recall": 1.0,
+      "correct_abstention": 1.0,
+      "over_abstention": 0.0,
+      "conflict_recall": 1.0,
+      "unsupported_claim_rate": 0.0,
+      "silent_errors": [],
+      "wrong_outcomes": []
+    },
+    {
+      "system": "agent(adversarial)",
+      "cases": 17,
+      "outcome_accuracy": 0.1176,
+      "silent_error_rate": 0.0,
+      "citation_validity": 0.6429,
+      "citation_recall": 0.9375,
+      "correct_abstention": 1.0,
+      "over_abstention": 1.0,
+      "conflict_recall": 1.0,
+      "unsupported_claim_rate": 0.0,
+      "silent_errors": [],
+      "wrong_outcomes": [
+        "case-001",
+        "case-002",
+        "case-003",
+        "case-004",
+        "case-005",
+        "case-006",
+        "case-007",
+        "case-008",
+        "case-009",
+        "case-010",
+        "case-012",
+        "case-013",
+        "case-014",
+        "case-015",
+        "case-016"
+      ]
+    }
+  ]
+}

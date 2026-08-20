@@ -1,0 +1,88 @@
+case_id: case-012
+title: Transformation laundering - the crop removed the region under discussion
+tags: [insufficient, adversarial, transformation]
+
+claim:
+  id: clm-012
+  text: >-
+    The supplied evidence shows that required protective equipment (hard hat
+    and hi-vis vest) was present during inspection INS-2426.
+  predicate: ppe_present
+  deciding_labels: [hard_hat, hi_vis_vest]
+  required_labels: [hard_hat, hi_vis_vest]
+  requires: [image_evidence, detector_evidence, human_record]
+  window_start: "2026-03-27T09:00:00Z"
+  window_end: "2026-03-27T11:00:00Z"
+  site: site-4/pump-house
+
+artifacts:
+  - id: img-012-orig
+    media_type: image
+    uri: s3://inspections/site-4/2026-03-27/img-012-orig.jpg
+    sha256: "b3390ca17e5d248f"
+    captured_at: "2026-03-27T10:02:00Z"
+    captured_by: cam-ph-01
+    uploaded_by: operator:t.lindqvist
+    site: site-4/pump-house
+  - id: img-012-crop
+    media_type: image
+    uri: s3://inspections/site-4/2026-03-27/img-012-crop.jpg
+    sha256: "cc71b0e4238a9d15"
+  - id: note-012
+    media_type: operator_note
+    uri: s3://inspections/site-4/2026-03-27/note-012.txt
+    sha256: "7f2ae08b915c46d3"
+    captured_at: "2026-03-27T10:25:00Z"
+    uploaded_by: operator:t.lindqvist
+    site: site-4/pump-house
+    text: >-
+      Cropped to heads only before upload, a member of the public was in the
+      background. Helmets were on.
+
+transformations:
+  - id: tf-012
+    op: crop
+    tool: preproc
+    tool_version: "1.4.0"
+    at: "2026-03-27T10:04:00Z"
+    params: {region: head_band, removed: [torso, legs]}
+    evidence_affecting: true
+    inputs: [img-012-orig]
+    outputs: [img-012-crop]
+
+observations:
+  - id: obs-012-a
+    obs_kind: detection
+    label: hard_hat
+    value: present
+    confidence: 0.93
+    at: "2026-03-27T10:05:00Z"
+    derived_from: [img-012-crop]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-012-b
+    obs_kind: detection
+    label: hi_vis_vest
+    value: absent
+    confidence: 0.71
+    at: "2026-03-27T10:05:00Z"
+    derived_from: [img-012-crop]
+    producer: {type: model, id: ppe-detector, version: "2.4.1"}
+  - id: obs-012-c
+    obs_kind: assertion
+    label: hard_hat
+    value: present
+    text: Helmets were on
+    span: [77, 92]
+    derived_from: [note-012]
+    producer: {type: human, id: operator:t.lindqvist}
+
+expected:
+  outcome: insufficient_evidence
+  evidence: [obs-012-c]
+  conflicts: []
+  missing: [image_evidence, detector_evidence]
+  rationale: >-
+    The vest detection fired absent on an image whose torso region had been
+    cropped away. Reading it as a contradiction would be as wrong as reading
+    the hat detection as support - the transformation, not the site, produced
+    both results.
