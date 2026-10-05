@@ -1,6 +1,6 @@
 # Provenance-Constrained Multimodal Investigation Agent
 
-A prototype for the ArcellAI project brief: an agent that decides whether a
+An agent that decides whether a
 visual-inspection claim is supported by the evidence recorded for a case, cites
 what it used, names what is missing or contradictory, and abstains or escalates
 when the evidence does not reach a conclusion.
